@@ -1,0 +1,86 @@
+##===============================================##
+
+OBS: estou utilizando padrao de yml para configurar o conexao com o banco de dados
+
+##=======para conectar com o banco h2=============##
+
+  datasource:
+    url: jdbc:h2:mem:assembleiaDB
+    driver-class-name: org.h2.Driver
+    username: assembleia
+    password:
+
+  jpa:
+    database-plataform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddel-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+##===============================================##
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/assembleiadb
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: senha do usuario
+
+  jpa:
+    database-plataform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddel-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+##====================================================##
+
+CREATE TABLE ASSOCIADO(
+	ID BINARY(16) PRIMARY KEY,
+	CPF VARCHAR(14),
+	NOME VARCHAR(120)
+);
+
+CREATE TABLE PAUTA(
+	ID BINARY(16) PRIMARY KEY,
+    NOME_PAUTA VARCHAR(50),
+    TOTAL_VOTOS LONG,
+    TOTAL_SIM LONG,
+    TOTAL_NAO LONG,
+    RESULTADO_PAUTA ENUM('APROVADA','REPROVADA','EMPATE')
+);
+
+CREATE TABLE VOTO(
+	PAUTA_ID BINARY(16),
+    ASSOCIADO_ID BINARY(16),
+    OPCAO ENUM('SIM', 'NAO'),
+
+    PRIMARY KEY(PAUTA_ID, ASSOCIADO_ID),
+
+    CONSTRAINT FK_VOTO_PAUTA
+		FOREIGN KEY(PAUTA_ID)
+        REFERENCES PAUTA(ID),
+
+    CONSTRAINT FK_VOTO_ASSOCIADO
+		FOREIGN KEY (ASSOCIADO_ID)
+        REFERENCES ASSOCIADO(ID)
+);
+
+CREATE TABLE SESSAO_VOTACAO(
+	ID INT auto_increment,
+    DATA_ABERTURA DATETIME,
+    DATA_FECHAMENTO DATETIME,
+    DURACAO LONG,
+    PAUTA_ID BINARY(16),
+
+    PRIMARY KEY (ID),
+    CONSTRAINT FK_SESSAO_VOTACAO_PAUTA
+    FOREIGN KEY (PAUTA_ID) REFERENCES PAUTA(ID)
+);
+##======================
+*** exemplo de comando para mostrar o uuid no mysql
+select BIN_TO_UUID(id) as id, nome from associado;
+#=======================
