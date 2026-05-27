@@ -71,6 +71,8 @@ public class AssociadoServiceTest {
         assertNotNull(resultado);
         assertEquals("Henrique", resultado.nome());
 
+        verify(associadoRepository, times(1)).existsByCpf(anyString());
+
         verify(associadoRepository, times(1)).save(any(Associado.class));
 
     }

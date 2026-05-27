@@ -34,9 +34,9 @@ public class PautaService {
 
         validarDuplicidadePauta(pauta);
 
-        Pauta salva = repository.save(pauta);
+        Pauta pautaSalva = repository.save(pauta);
 
-        return PautaMapper.toDTO(salva);
+        return PautaMapper.toDTO(pautaSalva);
     }
 
     public Pauta salvar(Pauta pauta) {

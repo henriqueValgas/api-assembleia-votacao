@@ -15,6 +15,7 @@ public interface PautaRepository extends JpaRepository<Pauta, UUID> {
     Optional<Pauta> findByNome(String nome);
 
     boolean existsByNome(String nome);
+
 /**
     @Query(value = "SELECT p FROM Pauta p WHERE p.dataEncerramento <= CURRENT_TIMESTAMP AND p.status = 'ABERTA' ")
     List<Pauta> buscarPautasAbertasEVencidas();
