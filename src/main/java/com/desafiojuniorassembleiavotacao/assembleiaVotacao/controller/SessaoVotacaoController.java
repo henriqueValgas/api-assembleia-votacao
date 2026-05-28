@@ -3,6 +3,7 @@ package com.desafiojuniorassembleiavotacao.assembleiaVotacao.controller;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.controller.dto.SessaoVotacaoRequestDTO;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.controller.dto.SessaoVotacaoResponseDTO;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.service.SessaoVotacaoService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +22,7 @@ public class SessaoVotacaoController implements GenericController{
     }
 
     @PostMapping
-    public ResponseEntity<SessaoVotacaoResponseDTO> sessaoVotacao(@RequestBody SessaoVotacaoRequestDTO dto) {
+    public ResponseEntity<SessaoVotacaoResponseDTO> sessaoVotacao(@Valid @RequestBody SessaoVotacaoRequestDTO dto) {
 
         SessaoVotacaoResponseDTO response = sessaoVotacaoService.salvarInicioSessao(dto);
         var uri = gerarHeaderLocation(response.id());

@@ -2,7 +2,6 @@ package com.desafiojuniorassembleiavotacao.assembleiaVotacao.repository;
 
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.model.Pauta;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +14,8 @@ public interface PautaRepository extends JpaRepository<Pauta, UUID> {
     Optional<Pauta> findByNome(String nome);
 
     boolean existsByNome(String nome);
+
+    List<Pauta> findByNomeContainingIgnoreCase(String nome);
 
 /**
     @Query(value = "SELECT p FROM Pauta p WHERE p.dataEncerramento <= CURRENT_TIMESTAMP AND p.status = 'ABERTA' ")

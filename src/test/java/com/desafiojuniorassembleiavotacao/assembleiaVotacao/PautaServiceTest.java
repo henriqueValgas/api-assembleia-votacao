@@ -15,8 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -33,9 +32,10 @@ public class PautaServiceTest {
     @InjectMocks
     private PautaService pautaService;
 
-    private PautaRequestDTO pautaRequestDTO;
-
+    @Mock
     private PautaResponseDTO pautaResponseDTO;
+
+    private PautaRequestDTO pautaRequestDTO;
 
     private Pauta pauta;
 
@@ -77,7 +77,7 @@ public class PautaServiceTest {
 
         verify(pautaRepository, times(1)).existsByNome(anyString());
 
-        verify(pautaRepository, times(1)).save(any());
+        verify(pautaRepository, times(1)).save(any(Pauta.class));
 
     }
 
@@ -87,9 +87,8 @@ public class PautaServiceTest {
         when(pautaRepository.existsByNome(anyString()))
                 .thenReturn(true);
 
-        assertThrows(RegistroDuplicadoException.class, () -> {
-            pautaService.salvar(pautaRequestDTO);
-        });
+        assertThrows(RegistroDuplicadoException.class, () ->
+                pautaService.salvar(pautaRequestDTO));
 
         verify(pautaRepository, never()).save(any(Pauta.class));
 
@@ -119,10 +118,54 @@ public class PautaServiceTest {
         when(pautaRepository.findById(uuid))
                 .thenReturn(Optional.empty());
 
-        assertThrows(RegistroNaoEncontradoException.class,() ->{
-            pautaService.buscarPautaVotacaoPorId(uuid);
-        });
+        assertThrows(RegistroNaoEncontradoException.class, () ->
+                pautaService.buscarPautaVotacaoPorId(uuid));
+
         verify(pautaRepository, times(1)).findById(uuid);
+    }
+
+    @Test
+    void deveListarTodasPautasQuandoNomeForVazio() {
+        List<Pauta> pautas = List.of(pauta);
+
+        when(pautaRepository.findAll())
+                .thenReturn(pautas);
+
+        List<PautaResponseDTO> resultado = pautaService.listaPauta("");
+
+        assertNotNull(resultado);
+        assertEquals(1, resultado.size());
+
+        verify(pautaRepository, times(1)).findAll();
+    }
+
+    @Test
+    void deveListarPautasPorNome() {
+        List<Pauta> pautas = List.of(pauta);
+
+        when(pautaRepository.findAllByNome(anyString()))
+                .thenReturn(List.of(pauta));
+
+        List<PautaResponseDTO> resultado = pautaService.listaPauta("Pauta teste");
+
+        assertFalse(resultado.isEmpty());
+        assertEquals(1, resultado.size());
+        assertEquals("Pauta teste", resultado.get(0).nome());
+
+        verify(pautaRepository, times(1)).findAllByNome(anyString());
+    }
+
+    @Test
+    void deveRetornarListaVaziaQuandoNaoEncontrarPautas() {
+
+        when(pautaRepository.findAllByNome(anyString()))
+                .thenReturn(Collections.emptyList());
+
+        List<PautaResponseDTO> resultado = pautaService.listaPauta("abc");
+
+        assertTrue(resultado.isEmpty());
+
+        verify(pautaRepository, times(1)).findAllByNome(anyString());
     }
 
 }

@@ -1,14 +1,17 @@
 package com.desafiojuniorassembleiavotacao.assembleiaVotacao.controller.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 import java.util.UUID;
 
 public record SessaoVotacaoRequestDTO(
+
         @NotNull
         UUID pautaId,
-        @NotBlank(message = "Coloque a quantidade de tempo para duracao da pauta")
-        long duracao
+
+        @NotNull(message = "Informe a duração")
+        @Positive(message = "A duraçao deve ser maior do que zero")
+        Long duracao
 ) {
 }

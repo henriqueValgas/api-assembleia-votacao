@@ -19,7 +19,7 @@ public class SessaoVotacao {
     private LocalDateTime dataFim;
 
    @Column(name = "duracao")
-    private long duracao;
+    private Long duracao;
 
     @OneToOne
     @JoinColumn(name = "pauta_id")
@@ -49,11 +49,11 @@ public class SessaoVotacao {
         this.dataFim = dataFim;
     }
 
-    public long getDuracao() {
+    public Long getDuracao() {
         return duracao;
     }
 
-    public void setDuracao(long duracao) {
+    public void setDuracao(Long duracao) {
         this.duracao = duracao;
     }
 

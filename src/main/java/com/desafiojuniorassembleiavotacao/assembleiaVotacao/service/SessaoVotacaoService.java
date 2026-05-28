@@ -39,11 +39,14 @@ public class SessaoVotacaoService {
 
         sessaoVotacao.setDataInicio(LocalDateTime.now());
 
-        sessaoVotacao.setDataFim(sessaoVotacao.getDataInicio().plusMinutes(sessaoVotacao.getDuracao()));
-
-        if (sessaoVotacao.getDataFim() == null) {
+        if (sessaoVotacao.getDuracao() == null || sessaoVotacao.getDuracao() == 0) {
             sessaoVotacao.setDataFim(sessaoVotacao.getDataInicio().plusMinutes(1));
         }
+
+        sessaoVotacao.setDataFim(
+                sessaoVotacao.getDataInicio()
+                        .plusMinutes(sessaoVotacao.getDuracao()));
+
     }
 
     public void verificaSessaoAberta(Pauta pauta) {
@@ -56,5 +59,4 @@ public class SessaoVotacaoService {
             throw new SessaoFechadaException("Votacao nao esta ativa");
         }
     }
-
 }

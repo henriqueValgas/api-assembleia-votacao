@@ -7,7 +7,7 @@ public record SessaoVotacaoResponseDTO(
         int id,
         UUID pautaId,
         LocalDateTime dataAbertura,
-        long duracao,
+        Long duracao,
         LocalDateTime dataFechamento
 ){
 }
