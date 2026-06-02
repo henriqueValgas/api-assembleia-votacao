@@ -41,6 +41,7 @@ public class SessaoVotacaoService {
 
         if (sessaoVotacao.getDuracao() == null || sessaoVotacao.getDuracao() == 0) {
             sessaoVotacao.setDataFim(sessaoVotacao.getDataInicio().plusMinutes(1));
+            return;
         }
 
         sessaoVotacao.setDataFim(
