@@ -2,7 +2,6 @@ package com.desafiojuniorassembleiavotacao.assembleiaVotacao;
 
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.controller.dto.SessaoVotacaoRequestDTO;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.controller.dto.SessaoVotacaoResponseDTO;
-import com.desafiojuniorassembleiavotacao.assembleiaVotacao.exceptions.RegistroNaoEncontradoException;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.exceptions.SessaoFechadaException;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.model.Pauta;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.model.SessaoVotacao;
@@ -15,17 +14,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.cglib.core.Local;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 import java.time.LocalDateTime;
 import java.util.Random;
 import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
@@ -96,17 +93,17 @@ public class SessaoVotacaoServiceTest {
     @Test
     void deveValidarcaSessaoAberta() {
 
-      Pauta pauta = new Pauta();
-      SessaoVotacao sessaoVotacao = new SessaoVotacao();
+        Pauta pauta = new Pauta();
+        SessaoVotacao sessaoVotacao = new SessaoVotacao();
 
-      sessaoVotacao.setDuracao(10L);
-      sessaoVotacao.setDataInicio(LocalDateTime.now().minusMinutes(1));
-      sessaoVotacao.setDataFim(LocalDateTime.now().plusMinutes(5));
+        sessaoVotacao.setDuracao(10L);
+        sessaoVotacao.setDataInicio(LocalDateTime.now().minusMinutes(1));
+        sessaoVotacao.setDataFim(LocalDateTime.now().plusMinutes(5));
 
-      pauta.setSessaoVotacao(sessaoVotacao);
+        pauta.setSessaoVotacao(sessaoVotacao);
 
 
-      assertDoesNotThrow(() -> sessaoVotacaoService.verificaSessaoAberta(pauta));
+        assertDoesNotThrow(() -> sessaoVotacaoService.verificaSessaoAberta(pauta));
 
     }
 
@@ -152,11 +149,5 @@ public class SessaoVotacaoServiceTest {
         assertThrows(SessaoFechadaException.class, () -> {
             sessaoVotacaoService.verificaSessaoAberta(pauta);
         });
-
-    }
-
-    @Test
-    void deveDefinirDuracaoPadraoDeUmMinutoQuandoDuracaoNaoInformada(){
-
     }
 }

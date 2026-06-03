@@ -1,6 +1,7 @@
 package com.desafiojuniorassembleiavotacao.assembleiaVotacao.model;
 
 import jakarta.persistence.*;
+
 import java.sql.Types;
 import java.util.UUID;
 
