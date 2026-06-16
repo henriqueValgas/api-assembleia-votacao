@@ -1,8 +1,8 @@
 package com.desafiojuniorassembleiavotacao.assembleiaVotacao;
 
+import com.desafiojuniorassembleiavotacao.assembleiaVotacao.controller.dto.ResultadoSessaoVotacaoRequestDTO;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.controller.dto.ResultadoSessaoVotacaoResponseDTO;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.exceptions.SessaoAindaAbertaException;
-import com.desafiojuniorassembleiavotacao.assembleiaVotacao.model.Associado;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.model.Pauta;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.model.ResultadoPauta;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.model.SessaoVotacao;
@@ -16,13 +16,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
 public class ResultadoVotacaoServiceTest {
@@ -37,6 +37,7 @@ public class ResultadoVotacaoServiceTest {
     private ResultadoVotacaoService resultadoVotacaoService;
 
     private UUID uuid;
+    private ResultadoSessaoVotacaoRequestDTO dto;
     private Pauta pauta;
     private SessaoVotacao sessaoVotacao;
 
@@ -44,6 +45,8 @@ public class ResultadoVotacaoServiceTest {
     public void setup() {
 
         uuid = UUID.randomUUID();
+        dto = new ResultadoSessaoVotacaoRequestDTO(uuid);
+
         pauta = new Pauta();
         sessaoVotacao = new SessaoVotacao();
 
@@ -70,7 +73,7 @@ public class ResultadoVotacaoServiceTest {
         when(votoService.vencedor(10L,5L))
                 .thenReturn(ResultadoPauta.APROVADA);
 
-        ResultadoSessaoVotacaoResponseDTO resultado = resultadoVotacaoService.resultadoPauta(uuid);
+        ResultadoSessaoVotacaoResponseDTO resultado = resultadoVotacaoService.resultadoPauta(dto);
 
         assertEquals(10L, pauta.getTotalSim());
         assertEquals(5L, pauta.getTotalNao());
@@ -89,7 +92,7 @@ public class ResultadoVotacaoServiceTest {
         when(pautaService.buscarPautaVotacaoPorId(uuid))
                 .thenReturn(pauta);
 
-        assertThrows(SessaoAindaAbertaException.class, () -> resultadoVotacaoService.resultadoPauta(uuid));
+        assertThrows(SessaoAindaAbertaException.class, () -> resultadoVotacaoService.resultadoPauta(dto));
         verify(pautaService, never()).salvar(any(Pauta.class));
     }
 }

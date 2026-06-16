@@ -31,18 +31,15 @@ public class VotoController implements GenericController {
 
     @PostMapping
     @Operation(
-            summary = "Salva voto",
-            description = "Salva o voto do associado na pauta viegente," +
+            summary = "Registrar voto por IDs",
+            description = "Salva o voto do associado na pauta vigente," +
                     " por Identificador do associado e identificador da pauta"
 
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Voto efetuado com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Associado não encontrado"),
-            @ApiResponse(responseCode = "404", description = "Pauta não encontrada"),
-            @ApiResponse(responseCode = "409", description = "Associado já votou"),
-            @ApiResponse(responseCode = "409", description = "Pauta não está ativa"),
-            @ApiResponse(responseCode = "409", description = "Votação encerrada")
+            @ApiResponse(responseCode = "201", description = "Voto efetuado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Associado ou pauta não encontrado"),
+            @ApiResponse(responseCode = "409", description = "Associado já votou, pauta não está ativa ou votação encerrada")
     })
     public ResponseEntity<VotoPorNomeAndCpfResponseDTO> salvarVoto(@Valid @RequestBody VotoDTO dto) {
 
@@ -55,18 +52,15 @@ public class VotoController implements GenericController {
 
     @PostMapping("/por-cpf")
     @Operation(
-            summary = "Salva voto",
-            description = "Salva o voto do associado na pauta viegente," +
+            summary = "Registrar voto por CPF e nome da pauta",
+            description = "Salva o voto do associado na pauta vigente," +
                     "por cpf do associado e pelo nome da pauta"
 
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Voto efetuado com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Associado não encontrado"),
-            @ApiResponse(responseCode = "404", description = "Pauta não encontrada"),
-            @ApiResponse(responseCode = "409", description = "Associado já votou"),
-            @ApiResponse(responseCode = "409", description = "Pauta não está ativa"),
-            @ApiResponse(responseCode = "409", description = "Votação encerrada")
+            @ApiResponse(responseCode = "201", description = "Voto efetuado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Associado ou pauta não encontrado"),
+            @ApiResponse(responseCode = "409", description = "Associado já votou, pauta não está ativa ou votação encerrada")
     })
     public ResponseEntity<VotoPorNomeAndCpfResponseDTO> salvarVotoPorNomeAndCpf(@Valid @RequestBody VotoPorNomeAndCpfRequestDTO dto) {
 

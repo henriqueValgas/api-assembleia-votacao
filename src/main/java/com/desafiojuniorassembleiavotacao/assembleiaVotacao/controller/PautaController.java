@@ -31,7 +31,7 @@ public class PautaController implements GenericController {
     @PostMapping
     @Operation(
             summary = "Cadastrar pauta",
-            description = "Criar uma nova pauta votação"
+            description = "Cria uma nova pauta votação"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Pauta criada com sucesso"),
@@ -66,7 +66,7 @@ public class PautaController implements GenericController {
 
     @GetMapping("{id}")
     @Operation(
-            summary = "Buscar pauta por ID",
+            summary = "Consultar pauta por ID",
             description = "Retorna os dados de uma pauta a partir do Id"
     )
     @ApiResponses({

@@ -18,7 +18,7 @@ import java.util.UUID;
 @RequestMapping("/associados")
 @Tag(
         name = "Associados",
-        description = "Operações para cadastras listar buscar e deletar novos associados"
+        description = "Operações para cadastras, listar, buscar, atualizar e deletar novos associados"
 )
 public class AssociadoController implements GenericController {
 
@@ -31,12 +31,12 @@ public class AssociadoController implements GenericController {
     @PostMapping
     @Operation(
             summary = "Cadastrar associado",
-            description = "Salvar um novo associado"
+            description = "Cadastra um novo associado"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Usuário salvo com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos"),
-            @ApiResponse(responseCode = "409", description = "Usuario ja cadastrado")
+            @ApiResponse(responseCode = "409", description = "Usuário ja cadastrado")
     })
     public ResponseEntity<AssociadoResponseDTO> salvar(
             @Valid @RequestBody AssociadoRequestDTO dto)
@@ -50,7 +50,7 @@ public class AssociadoController implements GenericController {
 
     @GetMapping
     @Operation(
-            summary = "Busca associado por nome",
+            summary = "Listar associados ou buscar por nomes",
             description = "Retorna os dados do associado caso encontre o nome," +
                     " caso campo esteja vazio retorna lista de associados"
     )
@@ -88,8 +88,8 @@ public class AssociadoController implements GenericController {
                     " e atualiza os dados cadastrais"
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Pauta atualizada com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Pauta não encontrada")
+            @ApiResponse(responseCode = "200", description = "Associado atualizada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Associado não encontrado")
 
     })
     public ResponseEntity<AssociadoResponseDTO> atualizar(
@@ -106,7 +106,7 @@ public class AssociadoController implements GenericController {
             description = "Deleta associado pelo identificador"
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Associado Excluido com sucesso"),
+            @ApiResponse(responseCode = "204", description = "Associado excluído com sucesso"),
             @ApiResponse(responseCode = "404", description = "Associado não encontrado")
     })
     public ResponseEntity<Void> deletar(@PathVariable("id") UUID id) {

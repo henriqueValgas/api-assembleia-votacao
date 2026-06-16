@@ -76,4 +76,4 @@ src/main/java
 ### Clonar repositório
 
 ```bash
-git clone http://github.com/###colocar aqui o link do repositorio assim que disponivel
+git clone git@github.com:henriqueValgas/api-assembleia-votacao.git
