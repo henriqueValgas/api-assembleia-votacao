@@ -22,7 +22,7 @@ public class SessaoVotacao {
     private Long duracao;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status_sessao")
+    @Column(name = "sessao_status")
     private SessaoStatus status;
 
     @OneToOne
