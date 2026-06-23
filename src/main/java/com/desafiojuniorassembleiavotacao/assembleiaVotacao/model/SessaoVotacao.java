@@ -21,8 +21,12 @@ public class SessaoVotacao {
    @Column(name = "duracao")
     private Long duracao;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status_sessao")
+    private SessaoStatus status;
+
     @OneToOne
-    @JoinColumn(name = "pauta_id")
+    @JoinColumn(name = "pauta_id", unique = true)
     private Pauta pauta;
 
     public int getId() {
@@ -63,5 +67,13 @@ public class SessaoVotacao {
 
     public void setPauta(Pauta pauta) {
         this.pauta = pauta;
+    }
+
+    public SessaoStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(SessaoStatus status) {
+        this.status = status;
     }
 }

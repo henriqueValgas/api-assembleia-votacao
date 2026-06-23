@@ -2,6 +2,7 @@ package com.desafiojuniorassembleiavotacao.assembleiaVotacao.service;
 
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.controller.dto.ResultadoSessaoVotacaoRequestDTO;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.controller.dto.ResultadoSessaoVotacaoResponseDTO;
+import com.desafiojuniorassembleiavotacao.assembleiaVotacao.exceptions.RegistroNaoEncontradoException;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.exceptions.SessaoAindaAbertaException;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.mapper.ResultadoPautaMapper;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.model.Pauta;
@@ -23,9 +24,9 @@ public class ResultadoVotacaoService {
     }
 
     @Transactional
-    public ResultadoSessaoVotacaoResponseDTO resultadoPauta(ResultadoSessaoVotacaoRequestDTO dto) {
+    public ResultadoSessaoVotacaoResponseDTO resultadoPauta(UUID id) {
 
-        Pauta pauta = pautaService.buscarPautaVotacaoPorId(dto.pautaId());
+        Pauta pauta = pautaService.buscarPautaVotacaoPorId(id);
 
         long votoSim = votoService.contaSim(pauta);
         long votoNao = votoService.contaNao(pauta);

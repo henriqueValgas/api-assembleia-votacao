@@ -87,7 +87,8 @@ public class PautaController implements GenericController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Pauta removida com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Pauta não encontrada")
+            @ApiResponse(responseCode = "404", description = "Pauta não encontrada"),
+            @ApiResponse(responseCode = "409", description = "Pauta já possui votos")
     })
     public ResponseEntity<Void> deletarPorId(
             @PathVariable(name = "id") UUID id)

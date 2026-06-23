@@ -7,7 +7,7 @@ import com.desafiojuniorassembleiavotacao.assembleiaVotacao.model.Pauta;
 public class ResultadoPautaMapper {
     public static Pauta toEntity(ResultadoSessaoVotacaoRequestDTO dto) {
         Pauta pauta = new Pauta();
-        pauta.setId(dto.pautaId());
+        pauta.setId(dto.id());
 
         return pauta;
     }

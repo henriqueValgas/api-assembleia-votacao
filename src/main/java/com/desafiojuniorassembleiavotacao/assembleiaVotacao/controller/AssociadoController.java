@@ -52,11 +52,12 @@ public class AssociadoController implements GenericController {
     @Operation(
             summary = "Listar associados ou buscar por nomes",
             description = "Retorna os dados do associado caso encontre o nome," +
-                    " caso campo esteja vazio retorna lista de associados"
+                    "se nao encontra nome retorna lista vazia" +
+                    "caso campo esteja vazio retorna lista de associados,"
+
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Associado encontrado"),
-            @ApiResponse(responseCode = "404", description = "Nenhum associado encontrado")
+            @ApiResponse(responseCode = "200", description = "Associado encontrado")
     })
     public ResponseEntity<List<AssociadoResponseDTO>> buscarPorNome(
             @RequestParam(value = "nome", required = false) String nome)
@@ -89,7 +90,8 @@ public class AssociadoController implements GenericController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Associado atualizada com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Associado não encontrado")
+            @ApiResponse(responseCode = "404", description = "Associado não encontrado"),
+            @ApiResponse(responseCode = "409", description = "Cpf já Cadastrado")
 
     })
     public ResponseEntity<AssociadoResponseDTO> atualizar(

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -100,25 +101,6 @@ public class GlobalExceptionHandler {
         );
     }
 
-    /**
-     *
-     * Este metodo nao esta mais em uso na api
-     *
-     * @deprecated
-     */
-    @Deprecated
-    @ExceptionHandler(CpfInvalidoException.class)
-    public ResponseEntity<ErroResponse> tratarCpfInvalidoException(
-            CpfInvalidoException ex, HttpServletRequest request)
-    {
-
-        return criarRespostaErro(HttpStatus.BAD_REQUEST,
-                "Cpf inválido",
-                ex.getMessage(),
-                request
-        );
-    }
-
     @ExceptionHandler(SessaoAindaAbertaException.class)
     public ResponseEntity<ErroResponse> tratarPautaAbertaException(
             SessaoAindaAbertaException ex, HttpServletRequest request
@@ -126,6 +108,18 @@ public class GlobalExceptionHandler {
     {
         return criarRespostaErro(HttpStatus.CONFLICT,
                 "Pauta ainda esta aberta",
+                ex.getMessage(),
+                request
+        );
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErroResponse> tratarErrosUuidInvalido(
+            MethodArgumentTypeMismatchException ex, HttpServletRequest request)
+    {
+        return  criarRespostaErro(
+                HttpStatus.BAD_REQUEST,
+                "id Invalido",
                 ex.getMessage(),
                 request
         );

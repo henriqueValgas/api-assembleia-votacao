@@ -37,7 +37,7 @@ public class ResultadoVotacaoServiceTest {
     private ResultadoVotacaoService resultadoVotacaoService;
 
     private UUID uuid;
-    private ResultadoSessaoVotacaoRequestDTO dto;
+
     private Pauta pauta;
     private SessaoVotacao sessaoVotacao;
 
@@ -45,7 +45,6 @@ public class ResultadoVotacaoServiceTest {
     public void setup() {
 
         uuid = UUID.randomUUID();
-        dto = new ResultadoSessaoVotacaoRequestDTO(uuid);
 
         pauta = new Pauta();
         sessaoVotacao = new SessaoVotacao();
@@ -73,7 +72,7 @@ public class ResultadoVotacaoServiceTest {
         when(votoService.vencedor(10L,5L))
                 .thenReturn(ResultadoPauta.APROVADA);
 
-        ResultadoSessaoVotacaoResponseDTO resultado = resultadoVotacaoService.resultadoPauta(dto);
+        ResultadoSessaoVotacaoResponseDTO resultado = resultadoVotacaoService.resultadoPauta(uuid);
 
         assertEquals(10L, pauta.getTotalSim());
         assertEquals(5L, pauta.getTotalNao());
@@ -92,7 +91,7 @@ public class ResultadoVotacaoServiceTest {
         when(pautaService.buscarPautaVotacaoPorId(uuid))
                 .thenReturn(pauta);
 
-        assertThrows(SessaoAindaAbertaException.class, () -> resultadoVotacaoService.resultadoPauta(dto));
+        assertThrows(SessaoAindaAbertaException.class, () -> resultadoVotacaoService.resultadoPauta(uuid));
         verify(pautaService, never()).salvar(any(Pauta.class));
     }
 }

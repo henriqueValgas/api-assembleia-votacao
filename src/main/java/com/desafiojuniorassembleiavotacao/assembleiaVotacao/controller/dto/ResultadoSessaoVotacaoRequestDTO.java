@@ -13,7 +13,6 @@ public record ResultadoSessaoVotacaoRequestDTO(
                 description = "identificador da pauta de votação",
                 example = "da2e3820-5227-4448-abf4-8054a814c6f4"
         )
-        UUID pautaId
-)
-{
+        UUID id
+){
 }

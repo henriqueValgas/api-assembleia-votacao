@@ -36,13 +36,14 @@ public class ResultadoVotacaoController implements GenericController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Resultado da votação retornado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "uuid informado é inválido"),
             @ApiResponse(responseCode = "404", description = "Pauta não encontrada"),
             @ApiResponse(responseCode = "409", description = "Pauta não iniciada ou ainda em aberto")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<ResultadoSessaoVotacaoResponseDTO> resultadoSessaoVotacao(@PathVariable ResultadoSessaoVotacaoRequestDTO dto) {
+    public ResponseEntity<ResultadoSessaoVotacaoResponseDTO> resultadoSessaoVotacao(@PathVariable UUID id) {
 
-        ResultadoSessaoVotacaoResponseDTO response = service.resultadoPauta(dto);
+        ResultadoSessaoVotacaoResponseDTO response = service.resultadoPauta(id);
 
         return ResponseEntity.ok(response);
     }
