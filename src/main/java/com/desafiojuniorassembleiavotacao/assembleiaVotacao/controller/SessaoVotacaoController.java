@@ -38,7 +38,7 @@ public class SessaoVotacaoController implements GenericController{
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Sessão iniciada com sucesso"),
             @ApiResponse(responseCode = "404", description = "Pauta não encontrada"),
-            @ApiResponse(responseCode = "409", description = "A pauta já possui uma sessão de votação ativa")
+            @ApiResponse(responseCode = "409", description = "Já existe uma sessão aberta ou Pauta ja foi encerrada e apurada")
     })
     public ResponseEntity<SessaoVotacaoResponseDTO> abrirSessao(@Valid @RequestBody SessaoVotacaoRequestDTO dto) {
 

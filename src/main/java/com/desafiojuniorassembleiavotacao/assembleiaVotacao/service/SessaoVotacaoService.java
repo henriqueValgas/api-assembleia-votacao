@@ -2,6 +2,8 @@ package com.desafiojuniorassembleiavotacao.assembleiaVotacao.service;
 
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.controller.dto.SessaoVotacaoRequestDTO;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.controller.dto.SessaoVotacaoResponseDTO;
+import com.desafiojuniorassembleiavotacao.assembleiaVotacao.exceptions.SessaoAindaAbertaException;
+import com.desafiojuniorassembleiavotacao.assembleiaVotacao.exceptions.SessaoEncerradaEApuradaException;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.exceptions.SessaoFechadaException;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.mapper.SessaoVotacaoMapper;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.model.Pauta;
@@ -34,7 +36,12 @@ public class SessaoVotacaoService {
         boolean existeSessaoAberta = repository.findByPautaIdAndStatus(dto.pautaId(), SessaoStatus.ABERTA).isPresent();
 
         if (existeSessaoAberta) {
-            throw new IllegalStateException("Já existe uma sessão aberta");
+            throw new SessaoAindaAbertaException("Já existe uma sessão aberta");
+        }
+
+        if (pauta.getSessaoVotacao() != null && pauta.getSessaoVotacao().getStatus() == SessaoStatus.ENCERRADA) {
+            throw new SessaoEncerradaEApuradaException("Sessao ja foi Apurada");
+
         }
 
         SessaoVotacao sessaoVotacao = SessaoVotacaoMapper.toEntity(dto, pauta);
@@ -76,8 +83,8 @@ public class SessaoVotacaoService {
     public void encerrarSessaoAberta() {
         List<SessaoVotacao> sessoesAbertas = repository.findByStatus(SessaoStatus.ABERTA);
 
-        for (SessaoVotacao sessao : sessoesAbertas){
-            if(LocalDateTime.now().isAfter(sessao.getDataFim())){
+        for (SessaoVotacao sessao : sessoesAbertas) {
+            if (LocalDateTime.now().isAfter(sessao.getDataFim())) {
                 sessao.setStatus(SessaoStatus.ENCERRADA);
                 repository.save(sessao);
             }

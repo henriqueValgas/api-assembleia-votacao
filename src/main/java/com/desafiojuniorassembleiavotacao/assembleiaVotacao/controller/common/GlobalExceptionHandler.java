@@ -60,6 +60,28 @@ public class GlobalExceptionHandler {
                 request);
     }
 
+    @ExceptionHandler(SessaoAindaAbertaException.class)
+    public ResponseEntity<ErroResponse> tratarErroVotacaoAberta(
+            SessaoAindaAbertaException ex, HttpServletRequest request
+    )
+    {
+        return criarRespostaErro(HttpStatus.CONFLICT,
+                "Votação ainda aberta,",
+                ex.getMessage(),
+                request
+        );
+    }
+
+    @ExceptionHandler(SessaoEncerradaEApuradaException.class)
+    public ResponseEntity<ErroResponse> tratarErroVotacaoEncerradaEApurada(
+            SessaoEncerradaEApuradaException ex, HttpServletRequest request
+    ){
+        return criarRespostaErro(HttpStatus.CONFLICT,
+                "Pauta ja encerrada e apurada",
+                ex.getMessage(),
+                request);
+    }
+
     @ExceptionHandler(AssociadoJaVotouException.class)
     public ResponseEntity<ErroResponse> tratarVotoDuplicado(
             AssociadoJaVotouException ex, HttpServletRequest request)
@@ -101,23 +123,11 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(SessaoAindaAbertaException.class)
-    public ResponseEntity<ErroResponse> tratarPautaAbertaException(
-            SessaoAindaAbertaException ex, HttpServletRequest request
-    )
-    {
-        return criarRespostaErro(HttpStatus.CONFLICT,
-                "Pauta ainda esta aberta",
-                ex.getMessage(),
-                request
-        );
-    }
-
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ErroResponse> tratarErrosUuidInvalido(
             MethodArgumentTypeMismatchException ex, HttpServletRequest request)
     {
-        return  criarRespostaErro(
+        return criarRespostaErro(
                 HttpStatus.BAD_REQUEST,
                 "id Invalido",
                 ex.getMessage(),
