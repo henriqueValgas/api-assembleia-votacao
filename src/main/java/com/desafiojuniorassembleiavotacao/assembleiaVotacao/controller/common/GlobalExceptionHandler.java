@@ -138,7 +138,7 @@ public class GlobalExceptionHandler {
     private ResponseEntity<ErroResponse> criarRespostaErro(
             HttpStatus status,
             String erro,
-            String mensagem,
+            Object mensagem,
             HttpServletRequest request)
     {
         ErroResponse response = new ErroResponse(
