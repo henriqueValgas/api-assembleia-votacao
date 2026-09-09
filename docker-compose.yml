@@ -1,0 +1,21 @@
+services:
+
+  mysql:
+    image: mysql:8.4
+    container_name: assembleia-mysql
+
+    environment:
+      MYSQL_DATABASE: assembleiadb
+      MYSQL_USER: assembleia
+      MYSQL_PASSWORD: assembleia
+      MYSQL_ROOT_PASSWORD: root
+
+    ports:
+      - "3307:3306"
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docs/create-tables.sql:/docker-entrypoint-initdb.d/create-tables.sql
+
+volumes:
+  mysql_data:

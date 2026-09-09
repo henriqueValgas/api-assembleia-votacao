@@ -3,6 +3,7 @@ package com.desafiojuniorassembleiavotacao.assembleiaVotacao.model;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "voto")
 public class Voto {
 
     @EmbeddedId

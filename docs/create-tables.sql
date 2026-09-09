@@ -1,43 +1,43 @@
-CREATE TABLE ASSOCIADO(
-    ID BINARY(16) PRIMARY KEY,
-    CPF VARCHAR(14),
-    NOME VARCHAR(120)
+CREATE TABLE associado(
+    id BINARY(16) PRIMARY KEY,
+    cpf VARCHAR(14),
+    nome VARCHAR(120)
 );
 
-CREATE TABLE PAUTA(
-    ID BINARY(16) PRIMARY KEY,
-    NOME_PAUTA VARCHAR(50),
-    TOTAL_VOTOS LONG,
-    TOTAL_SIM LONG,
-    TOTAL_NAO LONG,
-    RESULTADO_PAUTA ENUM('APROVADA','REPROVADA','EMPATE')
+CREATE TABLE pauta(
+    id BINARY(16) PRIMARY KEY,
+    nome_pauta VARCHAR(50),
+    total_votos LONG,
+    total_sim LONG,
+    total_nao LONG,
+    resultado_pauta ENUM('APROVADA','REPROVADA','EMPATE')
 );
 
-CREATE TABLE VOTO(
-    PAUTA_ID BINARY(16),
-    ASSOCIADO_ID BINARY(16),
-    OPCAO ENUM('SIM', 'NAO'),
+CREATE TABLE voto(
+    pauta_id BINARY(16),
+    associado_id BINARY(16),
+    opcao ENUM('SIM', 'NAO'),
 
-    PRIMARY KEY(PAUTA_ID, ASSOCIADO_ID),
+    PRIMARY KEY(pauta_id, associado_id),
 
-    CONSTRAINT FK_VOTO_PAUTA
-        FOREIGN KEY(PAUTA_ID)
-            REFERENCES PAUTA(ID),
+    CONSTRAINT fk_voto_pauta
+        FOREIGN KEY(pauta_id)
+            REFERENCES pauta(id),
 
-    CONSTRAINT FK_VOTO_ASSOCIADO
-        FOREIGN KEY (ASSOCIADO_ID)
-            REFERENCES ASSOCIADO(ID)
+    CONSTRAINT fk_voto_associado
+        FOREIGN KEY (associado_id)
+            REFERENCES associado(id)
 );
 
-CREATE TABLE SESSAO_VOTACAO(
-    ID INT auto_increment,
-    DATA_ABERTURA DATETIME,
-    DATA_FECHAMENTO DATETIME,
-    DURACAO LONG,
-    SESSAO_STATUS ENUM('ABERTA','ENCERRADA'),
-    PAUTA_ID BINARY(16),
+CREATE TABLE sessao_votacao(
+    id INT auto_increment,
+    data_abertura DATETIME,
+    data_fechamento DATETIME,
+    duracao LONG,
+    sessao_status ENUM('ABERTA','ENCERRADA'),
+    pauta_id BINARY(16),
 
-    PRIMARY KEY (ID),
-    CONSTRAINT FK_SESSAO_VOTACAO_PAUTA
-       FOREIGN KEY (PAUTA_ID) REFERENCES PAUTA(ID)
+    PRIMARY KEY (id),
+    CONSTRAINT fk_sessao_votacao_pauta
+       FOREIGN KEY (pauta_id) REFERENCES pauta(id)
 );

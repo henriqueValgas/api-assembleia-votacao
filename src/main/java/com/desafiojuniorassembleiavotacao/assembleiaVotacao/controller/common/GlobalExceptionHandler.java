@@ -27,6 +27,7 @@ public class GlobalExceptionHandler {
                 , request);
     }
 
+
     @ExceptionHandler(RegistroDuplicadoException.class)
     public ResponseEntity<ErroResponse> tratarRegistroDuplicado(
             RegistroDuplicadoException ex, HttpServletRequest request)

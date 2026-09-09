@@ -66,7 +66,7 @@ public class AssociadoController implements GenericController {
         return ResponseEntity.ok(service.listarTodos(nome));
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     @Operation(
             summary = "Buscar associado pelo identificador",
             description = "Retorna os dados do associado caso encontre o identificador"
@@ -82,7 +82,7 @@ public class AssociadoController implements GenericController {
         return ResponseEntity.ok(service.obterPorId(id));
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     @Operation(
             summary = "Atualiza o dados do associado",
             description = "busca o associado pelo identificador" +
@@ -102,7 +102,7 @@ public class AssociadoController implements GenericController {
         return ResponseEntity.ok(service.atualizar(id, dto));
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     @Operation(
             summary = "Deleta associado",
             description = "Deleta associado pelo identificador"

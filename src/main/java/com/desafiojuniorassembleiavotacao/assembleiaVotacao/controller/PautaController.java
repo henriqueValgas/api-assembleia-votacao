@@ -96,5 +96,4 @@ public class PautaController implements GenericController {
         service.deletar(id);
         return ResponseEntity.noContent().build();
     }
-
 }
