@@ -17,5 +17,20 @@ services:
       - mysql_data:/var/lib/mysql
       - ./docs/create-tables.sql:/docker-entrypoint-initdb.d/create-tables.sql
 
+  api:
+    build: .
+    container_name: assembleia-api
+
+    ports:
+      - "8080:8080"
+
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/assembleiadb
+      DB_USER: assembleia
+      DB_PASSWORD: assembleia
+
+    depends_on:
+      - mysql
+
 volumes:
   mysql_data:
