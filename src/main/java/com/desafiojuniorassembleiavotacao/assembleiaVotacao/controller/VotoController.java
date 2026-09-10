@@ -25,6 +25,7 @@ public class VotoController implements GenericController {
 
     private final VotoService votoService;
 
+
     public VotoController(VotoService votoService) {
         this.votoService = votoService;
     }

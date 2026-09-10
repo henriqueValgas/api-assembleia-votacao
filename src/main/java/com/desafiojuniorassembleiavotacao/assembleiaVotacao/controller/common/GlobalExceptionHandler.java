@@ -21,12 +21,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErroResponse> tratarErroGenerico(
             Exception ex, HttpServletRequest request)
     {
+        ex.printStackTrace();
+
         return criarRespostaErro(HttpStatus.INTERNAL_SERVER_ERROR,
                 "Erro Interno",
                 "Ocorreu um erro inesperado"
                 , request);
     }
-
 
     @ExceptionHandler(RegistroDuplicadoException.class)
     public ResponseEntity<ErroResponse> tratarRegistroDuplicado(
@@ -131,6 +132,18 @@ public class GlobalExceptionHandler {
         return criarRespostaErro(
                 HttpStatus.BAD_REQUEST,
                 "id Invalido",
+                ex.getMessage(),
+                request
+        );
+    }
+
+    @ExceptionHandler(AssociadoNaoApto.class)
+    public ResponseEntity<ErroResponse> tratarAssociadoAptoAVotar(
+            AssociadoNaoApto ex, HttpServletRequest request
+    ){
+        return criarRespostaErro(
+                HttpStatus.CONFLICT,
+                "Associado não apto",
                 ex.getMessage(),
                 request
         );

@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: ${DB_URL:jdbc:mysql://localhost:3307/assembleiadb}
+    url: ${DB_URL:jdbc:mysql://localhost:3306/assembleiadb}
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${DB_USER}
     password: ${DB_PASSWORD}
@@ -13,6 +13,10 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+user-info:
+  url: ${USER_INFO_URL:http://localhost:8081}
+
 
 kind: Application
 

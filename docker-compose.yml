@@ -28,9 +28,18 @@ services:
       DB_URL: jdbc:mysql://mysql:3306/assembleiadb
       DB_USER: assembleia
       DB_PASSWORD: assembleia
+      USER_INFO_URL: http://mock-user-info:8081
 
     depends_on:
       - mysql
+      - mock-user-info
+
+  mock-user-info:
+    build: ./mock-user-info
+    container_name: mock-user-info
+
+    ports:
+      - "8081:8081"
 
 volumes:
   mysql_data:

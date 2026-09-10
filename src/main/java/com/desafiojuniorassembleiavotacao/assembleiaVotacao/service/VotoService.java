@@ -1,8 +1,11 @@
 package com.desafiojuniorassembleiavotacao.assembleiaVotacao.service;
 
+import com.desafiojuniorassembleiavotacao.assembleiaVotacao.client.UserInfoClient;
+import com.desafiojuniorassembleiavotacao.assembleiaVotacao.controller.dto.UserInfoResponse;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.controller.dto.VotoDTO;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.controller.dto.VotoPorNomeAndCpfRequestDTO;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.controller.dto.VotoPorNomeAndCpfResponseDTO;
+import com.desafiojuniorassembleiavotacao.assembleiaVotacao.exceptions.AssociadoNaoApto;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.mapper.VotoMapper;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.mapper.VotoPorNomeAndCpfMapper;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.model.Associado;
@@ -23,11 +26,12 @@ public class VotoService {
     private final PautaService pautaService;
     private final AssociadoService associadoService;
     private final SessaoVotacaoService sessaoVotacaoService;
+    private final UserInfoClient userInfoClient;
 
     public VotoService(PautaDomainService domainService,
             VotoRepository votoRepository,
             PautaService pautaService,
-            AssociadoService associadoService, SessaoVotacaoService sessaoVotacaoService)
+            AssociadoService associadoService, SessaoVotacaoService sessaoVotacaoService, UserInfoClient userInfoClient)
     {
 
         this.domainService = domainService;
@@ -35,6 +39,7 @@ public class VotoService {
         this.pautaService = pautaService;
         this.associadoService = associadoService;
         this.sessaoVotacaoService = sessaoVotacaoService;
+        this.userInfoClient = userInfoClient;
     }
 
     @Transactional
@@ -60,6 +65,9 @@ public class VotoService {
         Associado associado = buscaAssociadoPorCpf(dto.cpf());
 
         sessaoVotacaoService.verificaSessaoAberta(pauta);
+
+        verificaAssociadoApto(associado.getCpf());
+
         boolean jaVotou = associadoJaVotou(pauta, associado);
         domainService.validarDuplicidade(jaVotou);
 
@@ -114,6 +122,17 @@ public class VotoService {
             return (ResultadoPauta.EMPATE);
         }
     }
+
+    private void verificaAssociadoApto(String cpf){
+
+        UserInfoResponse responseUser = userInfoClient.verificarAptidao(cpf);
+
+        if(!responseUser.ableToVote()){
+            throw new AssociadoNaoApto("Associado não pode votar");
+        }
+    }
+
+
 
 }
 
