@@ -306,7 +306,6 @@ http://localhost:8080/swagger-ui/index.html
 # Observações
 
 * Este projeto foi desenvolvido com foco no aprendizado de desenvolvimento backend e na aplicação de boas práticas de arquitetura utilizando Java e Spring Boot.
-* O desafio utilizado como base para o desenvolvimento está disponível no Reddit.
-* - O desafio utilizado como base para o desenvolvimento está disponível no [Reddit](https://www.reddit.com/r/brdev/comments/1fgh625/ajuda_com_desafio_t%C3%A9cnico_em_javaspring_para_vaga/?tl=pt-br).
+* O desafio utilizado como base para o desenvolvimento está disponível no [Reddit](https://www.reddit.com/r/brdev/comments/1fgh625/ajuda_com_desafio_t%C3%A9cnico_em_javaspring_para_vaga/?tl=pt-br).
 * Optei por utilizar **mappers manuais** como forma de aprofundar o entendimento sobre conversão entre entidades e DTOs.
 * O projeto possui suporte tanto para execução local quanto para execução completa utilizando Docker Compose.
