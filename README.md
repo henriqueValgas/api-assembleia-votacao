@@ -9,8 +9,11 @@ O sistema permite:
 * Cadastro de associados
 * Criação de pautas
 * Abertura de sessões de votação
+* Verificação da aptidão do associado para votar
 * Registro de votos
 * Apuração de resultados
+
+O projeto também possui um **mock de serviço externo** responsável por simular a consulta de aptidão do associado para votação.
 
 Projeto desenvolvido com foco em boas práticas de desenvolvimento backend utilizando **Java e Spring Boot**.
 
@@ -34,16 +37,33 @@ Projeto desenvolvido com foco em boas práticas de desenvolvimento backend utili
 ## Estrutura do projeto
 
 ```text
-src/main/java
-├── controller
-├── service
-├── repository
-├── model
-├── dto
-├── mapper
-├── exceptions
-└── config
+api-assembleia-votacao
+├── src
+│   └── main
+│       └── java
+│           ├── controller
+│           ├── service
+│           ├── repository
+│           ├── model
+│           ├── dto
+│           ├── mapper
+│           ├── exceptions
+│           └── config
+│
+├── docs
+│   └── create-tables.sql
+│
+├── mock-user-info
+│   ├── src
+│   ├── pom.xml
+│   └── Dockerfile
+│
+├── Dockerfile
+├── docker-compose.yml
+└── pom.xml
 ```
+
+O projeto `mock-user-info` é uma aplicação Spring Boot independente utilizada para simular um serviço externo de consulta de aptidão para votação.
 
 ---
 
@@ -60,9 +80,9 @@ src/main/java
 ### Pautas
 
 * Criar pauta
-* Abrir sessão de votação
 * Buscar pauta
 * Listar pautas
+* Abrir sessão de votação
 * Apurar resultado
 
 ### Votos
@@ -70,6 +90,13 @@ src/main/java
 * Registrar voto
 * Buscar votos
 * Impedir voto duplicado
+* Consultar votos por CPF
+
+### Aptidão para votação
+
+Antes do registro do voto, a aplicação consulta o serviço `mock-user-info` para verificar se o associado está apto a votar.
+
+O mock simula as respostas de um serviço externo de consulta de usuários, permitindo testar a integração entre APIs sem depender de um serviço externo real.
 
 ---
 
@@ -78,13 +105,13 @@ src/main/java
 O projeto pode ser executado de duas formas:
 
 1. **Localmente**, utilizando Java, Maven e MySQL.
-2. **Utilizando Docker Compose**, que inicia a API e o banco de dados em containers.
+2. **Utilizando Docker Compose**, que inicia a API, o banco de dados e o serviço mock.
 
 ---
 
-## Opção 1 — Execução local
+# Opção 1 — Execução local
 
-### Pré-requisitos
+## Pré-requisitos
 
 Para executar a aplicação localmente, é necessário ter instalado:
 
@@ -143,11 +170,13 @@ A aplicação estará disponível em:
 http://localhost:8080
 ```
 
+> Para utilizar a funcionalidade de verificação de aptidão para votação durante a execução local, o serviço `mock-user-info` também deverá estar em execução.
+
 ---
 
-# Opção 2 — Execução com Docker
+# Opção 2 — Execução com Docker Compose
 
-### Pré-requisito
+## Pré-requisito
 
 Para executar o projeto utilizando Docker, é necessário ter instalado:
 
@@ -155,7 +184,9 @@ Para executar o projeto utilizando Docker, é necessário ter instalado:
 
 Não é necessário instalar Java, Maven ou MySQL na máquina para executar a aplicação utilizando esta opção.
 
-### Iniciar a aplicação
+O projeto já possui o serviço `mock-user-info`, portanto toda a estrutura necessária para executar e testar a integração entre as APIs está incluída no repositório.
+
+## Iniciar a aplicação
 
 Na raiz do projeto, execute:
 
@@ -166,24 +197,27 @@ docker compose up --build
 O Docker Compose irá:
 
 1. Criar o container do MySQL.
-2. Inicializar o banco de dados.
-3. Criar o container da API.
-4. Construir a aplicação utilizando o Dockerfile.
-5. Iniciar a API conectada ao banco de dados.
+2. Inicializar o banco de dados utilizando o script `docs/create-tables.sql`.
+3. Construir a aplicação principal utilizando o Dockerfile.
+4. Criar o container da API.
+5. Construir e iniciar o serviço `mock-user-info`.
+6. Configurar a comunicação entre os containers.
+7. Iniciar a API conectada ao banco de dados e ao serviço mock.
 
-### Verificar os containers
+### Containers
 
-Em outro terminal, execute:
+Após a inicialização, os principais serviços serão:
+
+```text
+assembleia-mysql
+assembleia-api
+mock-user-info
+```
+
+É possível verificar o estado dos containers com:
 
 ```bash
 docker compose ps
-```
-
-Os principais serviços são:
-
-```text
-assembleia-api
-assembleia-mysql
 ```
 
 ### Acessar a aplicação
@@ -192,6 +226,12 @@ Após os containers iniciarem, a API estará disponível em:
 
 ```text
 http://localhost:8080
+```
+
+O serviço mock estará disponível na máquina host em:
+
+```text
+http://localhost:8081
 ```
 
 ### Swagger
@@ -209,7 +249,69 @@ Com o Swagger é possível:
 * Consultar os DTOs
 * Consultar os contratos da API
 
-### Parar os containers
+---
+
+## Comunicação entre os containers
+
+O Docker Compose cria uma rede interna para permitir a comunicação entre os serviços.
+
+A API utiliza o nome do serviço para acessar o MySQL:
+
+```text
+jdbc:mysql://mysql:3306/assembleiadb
+```
+
+Da mesma forma, a API utiliza o nome do serviço `mock-user-info` para acessar o serviço de verificação de aptidão:
+
+```text
+http://mock-user-info:8081
+```
+
+Dentro da rede Docker, os containers não utilizam `localhost` para se comunicar entre si.
+
+A porta `3307` é utilizada para acesso ao MySQL a partir da máquina host, enquanto a comunicação entre os containers ocorre através da porta interna `3306`.
+
+As portas utilizadas são:
+
+| Serviço        | Porta do host | Porta do container |
+| -------------- | ------------: | -----------------: |
+| API            |          8080 |               8080 |
+| Mock User Info |          8081 |               8081 |
+| MySQL          |          3307 |               3306 |
+
+---
+
+## Testando a integração com o Mock User Info
+
+Ao registrar um voto, a API consulta o serviço `mock-user-info` para verificar se o CPF informado está apto a votar.
+
+O fluxo simplificado é:
+
+```text
+Cliente
+   │
+   │ registra voto
+   ▼
+API Assembleia
+   │
+   │ consulta CPF
+   ▼
+Mock User Info
+   │
+   │ retorna aptidão
+   ▼
+API Assembleia
+   │
+   ├── apto → registra voto
+   │
+   └── não apto → rejeita votação
+```
+
+Dessa forma, a integração com um serviço externo pode ser testada localmente sem depender de uma API de terceiros.
+
+---
+
+## Parar os containers
 
 Para parar a aplicação:
 
@@ -228,7 +330,7 @@ docker compose up
 O banco de dados utiliza um volume Docker para persistir os dados:
 
 ```text
-assembleiavotacao_mysql_data
+mysql_data
 ```
 
 Por isso, ao executar:
@@ -246,24 +348,6 @@ docker compose down -v
 ```
 
 > **Atenção:** o comando `docker compose down -v` remove o volume do banco de dados e, consequentemente, os dados persistidos.
-
-### Comunicação entre os containers
-
-Quando a aplicação é executada através do Docker Compose, a API não utiliza `localhost` para acessar o MySQL.
-
-A comunicação entre os containers utiliza o nome do serviço definido no `docker-compose.yml`:
-
-```text
-mysql
-```
-
-A conexão da API com o banco utiliza:
-
-```text
-jdbc:mysql://mysql:3306/assembleiadb
-```
-
-A porta `3307` é utilizada para acesso ao MySQL a partir da máquina host, enquanto a comunicação entre os containers ocorre através da porta interna `3306`.
 
 ---
 
@@ -300,6 +384,7 @@ http://localhost:8080/swagger-ui/index.html
 * Autenticação e autorização utilizando JWT
 * Paginação de resultados
 * Auditoria de votos
+* Substituição do mock por uma integração com serviço externo real
 
 ---
 
@@ -309,3 +394,4 @@ http://localhost:8080/swagger-ui/index.html
 * O desafio utilizado como base para o desenvolvimento está disponível no [Reddit](https://www.reddit.com/r/brdev/comments/1fgh625/ajuda_com_desafio_t%C3%A9cnico_em_javaspring_para_vaga/?tl=pt-br).
 * Optei por utilizar **mappers manuais** como forma de aprofundar o entendimento sobre conversão entre entidades e DTOs.
 * O projeto possui suporte tanto para execução local quanto para execução completa utilizando Docker Compose.
+* O serviço `mock-user-info` está incluído no próprio repositório para permitir a execução e o teste da integração entre APIs sem depender de serviços externos.
