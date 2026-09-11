@@ -131,8 +131,5 @@ public class VotoService {
             throw new AssociadoNaoApto("Associado não pode votar");
         }
     }
-
-
-
 }
 

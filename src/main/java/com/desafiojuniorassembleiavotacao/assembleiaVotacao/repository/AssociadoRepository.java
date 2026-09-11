@@ -13,8 +13,6 @@ public interface AssociadoRepository extends JpaRepository<Associado, UUID> {
 
     Optional<Associado> findByCpf(String cpf);
 
-    boolean existsByNome(String nome);
-
     boolean existsByCpf(String cpf);
 
 }

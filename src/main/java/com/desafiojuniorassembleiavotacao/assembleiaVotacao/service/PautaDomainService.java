@@ -2,7 +2,6 @@ package com.desafiojuniorassembleiavotacao.assembleiaVotacao.service;
 
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.exceptions.AssociadoJaVotouException;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.exceptions.PautaJaTemVotosException;
-import com.desafiojuniorassembleiavotacao.assembleiaVotacao.model.Associado;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.model.Pauta;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +14,7 @@ public class PautaDomainService {
         }
     }
 
-    public void validarDuplicidade(boolean  jaExiste) {
+    public void validarDuplicidade(boolean jaExiste) {
 
         if (jaExiste) {
             throw new AssociadoJaVotouException("Associado ja votou");

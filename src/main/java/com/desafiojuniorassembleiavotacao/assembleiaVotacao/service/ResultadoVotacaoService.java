@@ -1,8 +1,6 @@
 package com.desafiojuniorassembleiavotacao.assembleiaVotacao.service;
 
-import com.desafiojuniorassembleiavotacao.assembleiaVotacao.controller.dto.ResultadoSessaoVotacaoRequestDTO;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.controller.dto.ResultadoSessaoVotacaoResponseDTO;
-import com.desafiojuniorassembleiavotacao.assembleiaVotacao.exceptions.RegistroNaoEncontradoException;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.exceptions.SessaoAindaAbertaException;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.mapper.ResultadoPautaMapper;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.model.Pauta;
