@@ -1,5 +1,6 @@
 package com.desafiojuniorassembleiavotacao.assembleiaVotacao.service;
 
+import com.desafiojuniorassembleiavotacao.assembleiaVotacao.config.SecurityConfig;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.controller.dto.AssociadoRequestDTO;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.controller.dto.AssociadoResponseDTO;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.exceptions.RegistroDuplicadoException;
@@ -7,6 +8,7 @@ import com.desafiojuniorassembleiavotacao.assembleiaVotacao.exceptions.RegistroN
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.mapper.AssociadoMapper;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.model.Associado;
 import com.desafiojuniorassembleiavotacao.assembleiaVotacao.repository.AssociadoRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,9 +20,11 @@ import java.util.UUID;
 public class AssociadoService {
 
     private final AssociadoRepository repository;
+    private final PasswordEncoder passwordEncoder;
 
-    public AssociadoService(AssociadoRepository repository) {
+    public AssociadoService(AssociadoRepository repository,  PasswordEncoder passwordEncoder) {
         this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
@@ -31,6 +35,8 @@ public class AssociadoService {
         if (repository.existsByCpf(dto.cpf())) {
             throw new RegistroDuplicadoException("Usuario ja cadastrado com esse CPF");
         }
+
+        associado.setSenha(passwordEncoder.encode(associado.getSenha()));
 
         Associado associadoSalvo = repository.save(associado);
 
@@ -48,6 +54,10 @@ public class AssociadoService {
             throw new RegistroDuplicadoException("Cpf ja cadastrado");
         }
         AssociadoMapper.updateAssociado(dto, associado);
+
+        if (dto.senha() != null) {
+            associado.setSenha(passwordEncoder.encode(dto.senha()));
+        }
 
         return AssociadoMapper.toDto(associado);
     }

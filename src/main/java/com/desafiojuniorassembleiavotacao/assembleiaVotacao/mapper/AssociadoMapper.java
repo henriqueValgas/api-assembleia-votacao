@@ -12,6 +12,7 @@ public class AssociadoMapper {
 
         associado.setNome(dto.nome());
         associado.setCpf(dto.cpf());
+        associado.setSenha(dto.senha());
 
         return associado;
     }
@@ -19,6 +20,7 @@ public class AssociadoMapper {
     public static void updateAssociado(AssociadoRequestDTO dto, Associado entity) {
         entity.setNome(dto.nome());
         entity.setCpf(dto.cpf());
+        entity.setSenha(dto.senha());
     }
 
     public static AssociadoResponseDTO toDto(Associado associado) {

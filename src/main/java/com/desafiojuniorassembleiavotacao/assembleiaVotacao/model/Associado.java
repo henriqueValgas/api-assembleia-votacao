@@ -22,6 +22,17 @@ public class Associado {
     @Column(name = "nome", length = 120, nullable = false)
     private String nome;
 
+    @Column(name = "senha", nullable = false)
+    private String senha;
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
     public UUID getId() {
         return id;
     }

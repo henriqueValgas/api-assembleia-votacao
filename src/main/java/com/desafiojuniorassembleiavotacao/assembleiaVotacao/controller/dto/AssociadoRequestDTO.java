@@ -22,6 +22,13 @@ public record AssociadoRequestDTO(
         )
         @NotBlank(message = "CPF obrigatorio")
         @CPF(message = "CPF inválido")
-        String cpf
+        String cpf,
+
+        @Schema(
+                description = "Nova senha",
+                example = "123456"
+        )
+        @NotBlank(message = "Senha obrigatorio")
+        String senha
 ){
 }

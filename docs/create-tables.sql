@@ -1,7 +1,8 @@
 CREATE TABLE associado(
     id BINARY(16) PRIMARY KEY,
     cpf VARCHAR(14),
-    nome VARCHAR(120)
+    nome VARCHAR(120),
+    senha VARCHAR(255)
 );
 
 CREATE TABLE pauta(
