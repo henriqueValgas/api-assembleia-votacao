@@ -5,10 +5,12 @@ import com.desafiojuniorassembleiavotacao.assembleiaVotacao.exceptions.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -145,6 +147,18 @@ public class GlobalExceptionHandler {
                 HttpStatus.CONFLICT,
                 "Associado não apto",
                 ex.getMessage(),
+                request
+        );
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErroResponse> tratarErroAutenticacao(
+            AuthenticationException ex, HttpServletRequest request){
+
+        return criarRespostaErro(
+                HttpStatus.UNAUTHORIZED,
+                "falha de autenticação",
+                "cpf ou senha inválidos",
                 request
         );
     }

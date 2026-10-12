@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -30,6 +31,9 @@ public class AssociadoServiceTest {
     @Mock
     private AssociadoResponseDTO associadoResponseDTO;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
     @InjectMocks
     private AssociadoService associadoService;
 
@@ -44,10 +48,12 @@ public class AssociadoServiceTest {
         associado.setId(uuid);
         associado.setNome("Henrique");
         associado.setCpf("12345678900");
+        associado.setSenha(passwordEncoder.encode("987645"));
 
         associadoRequestDTO = new AssociadoRequestDTO(
                 "Henrique",
-                "12345978900"
+                "12345978900",
+                "987645"
         );
 
         associadoResponseDTO = new AssociadoResponseDTO(

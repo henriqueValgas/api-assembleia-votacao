@@ -1,21 +1,27 @@
 const listaPautas = document.querySelector("#lista-pautas");
 
-fetch("http://localhost:8080/pautas")
-    .then(response => {
+requisicaoAutenticada("/pautas")
+    .then( response => {
         console.log(response.status);
+
+        if(!response.ok){
+            throw new Error(`Erro ao buscar pautas: ${response.status}`)
+        }
 
         return response.json();
     })
-    .then (data => {
-        data.forEach(pauta => {
+    .then(data => { data.forEach(pauta => {
 
         const link = document.createElement("a");
 
-        link.href = `pauta.html?id=${pauta.id}`;
-        
+        link.href = `pauta.html? id=${pauta.id}`;
+
         link.textContent = pauta.nome;
 
-        listaPautas.appendChild(link);
+        listaPautas.appendChild(link);       
 
         });
+    })
+    .catch( error => {
+        console.error("Erro ao carregar pautas", error);    
     });
